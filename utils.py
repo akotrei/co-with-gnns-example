@@ -208,8 +208,8 @@ def run_gnn_training(q_torch, dgl_graph, net, embed, optimizer, number_epochs, t
             best_loss = loss
             best_bitstring = bitstring
 
-        if epoch % 1000 == 0:
-            print(f'Epoch: {epoch}, Loss: {loss_}')
+        # if epoch % 1000 == 0:
+            # print(f'Epoch: {epoch}, Loss: {loss_}')
 
         # early stopping check
         # If loss increases or change in loss is too small, trigger
@@ -219,7 +219,7 @@ def run_gnn_training(q_torch, dgl_graph, net, embed, optimizer, number_epochs, t
             count = 0
 
         if count >= patience:
-            print(f'Stopping early on epoch {epoch} (patience: {patience})')
+            # print(f'Stopping early on epoch {epoch} (patience: {patience})')
             break
 
         # update loss tracking
@@ -231,10 +231,7 @@ def run_gnn_training(q_torch, dgl_graph, net, embed, optimizer, number_epochs, t
         optimizer.step()       # take step, update weights
 
     t_gnn = time() - t_gnn_start
-    print(f'GNN training (n={dgl_graph.number_of_nodes()}) took {round(t_gnn, 3)}')
-    print(f'GNN final continuous loss: {loss_}')
-    print(f'GNN best continuous loss: {best_loss}')
 
     final_bitstring = (probs.detach() >= prob_threshold) * 1
 
-    return net, epoch, final_bitstring, best_bitstring
+    return t_gnn, epoch, final_bitstring, best_bitstring
